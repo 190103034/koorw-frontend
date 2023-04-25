@@ -1,9 +1,9 @@
 <template>
     <Block class="chat" @click="open">
         <template #picture>{{ picture }}</template>
-        <template #title>{{ props.chat?.chatName }}</template>
-        <template #subheader>{{ props.chat?.personName }}</template>
-        <template #caption>{{ props.chat?.message }}</template>
+        <template #title>{{ props.chat.name }}</template>
+        <template #subheader>{{ props.chat.last_message?.user.name }}</template>
+        <template #caption>{{ props.chat.last_message?.message }}</template>
     </Block>
 </template>
 
@@ -15,14 +15,17 @@
 
 <script setup lang="ts">
     const props = defineProps({
-        chat: Object as () => Chat
+        chat: {
+            type: Object as () => Chat,
+            required: true
+        }
     })
 
     const picture = computed(() => {
-        return (props.chat?.newMessages && props.chat?.newMessages > 0) ? `+${props.chat?.newMessages}` : ':)'
+        return `${props.chat.name.charAt(0)}`
     })
 
     const open = () => {
-        navigateTo('/chats/1')
+        navigateTo(`/chats/${props.chat.id}`)
     }
 </script>

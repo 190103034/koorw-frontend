@@ -10,6 +10,7 @@ declare global {
     }
 
     interface User {
+        id: Number,
         username: string,
         picture: string,
         name: string,
@@ -17,7 +18,10 @@ declare global {
     }
 
     interface Post {
+        id: number,
         hash_id: number,
+        category_id: number,
+        visibility_id: number,
         user: User,
         body: string,
         like_count: number,
@@ -26,10 +30,12 @@ declare global {
     }
 
     interface Chat {
-        newMessages: number,
-        chatName: string,
-        personName: string,
-        message: string
+        id: number,
+        name: string,
+        last_message: {
+            user: User,
+            message: string
+        }
     }
 
     interface ServiceContact {
@@ -40,6 +46,16 @@ declare global {
     interface Service {
         name: string,
         contacts: ServiceContact[]
+    }
+
+    interface Category {
+        id: number,
+        name: string
+    }
+
+    interface Visibility {
+        id: number,
+        name: string
     }
 
 }

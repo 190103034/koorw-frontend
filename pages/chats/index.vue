@@ -6,18 +6,13 @@
 </template>
 
 <script setup lang="ts">
-    const chats = ref([
-        {
-            newMessages: 5,
-            chatName: "Блок 2",
-            personName: "Әсел Сүлеймен",
-            message: "Соседи, предлагаю нам всем.."
-        },
-        {
-            newMessages: 0,
-            chatName: "ЖК Türkistan",
-            personName: "Серік Бекбол",
-            message: "Тоже так считаю"
-        },
-    ])
+    const runTimeConfig = useRuntimeConfig()
+
+    const { data: chats } = await useFetch(`${runTimeConfig.public.baseApi}/api/chats`, {
+        onRequest({ options }) {
+            options.headers = {
+                'Authorization': `Bearer ${useCookie('token').value}`
+            }
+        }
+    })
 </script>

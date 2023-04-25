@@ -15,9 +15,9 @@
                     <h1>{{ title }}</h1>
                 </div>
                 <div v-show="isBack || isSearch">
-                    <div v-show="isSearch" class="header__search">
+                    <NuxtLink to="/search" v-show="isSearch" class="header__search">
                         <font-awesome-icon icon="fa-solid fa-magnifying-glass" class="icon_medium" />
-                    </div>
+                    </NuxtLink>
                 </div>
             </div>    
         </div>
@@ -28,6 +28,7 @@
 <style lang="scss" scoped>
     .header {
         top: 0;
+        z-index: 99;
         width: 100%;
         position: sticky;
         background-color: #fff;

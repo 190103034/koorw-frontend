@@ -4,7 +4,7 @@
         <Post :post="post"></Post>
         <h2 v-if="post.child_posts.length > 0">Комментарии</h2>
         <Post v-for="comment in post.child_posts" :key="comment.hash_id" :post="comment"></Post>
-        <Send placeholder="Написать свой комментарий.."></Send>
+        <Send placeholder="Написать свой комментарий.." @send="send"></Send>
     </Content>
 </template>
 
@@ -18,30 +18,35 @@
     const runTimeConfig = useRuntimeConfig()
     const route = useRoute()
 
-    const { data: post } = await useFetch(`${runTimeConfig.public.baseApi}/api/post/${route.params.hash}`)
-
-    const comments = ref([
-        {
-            user: {
-                picture: '/asem.jpg',
-                name: 'Әсем Қанат',
-                address: '5 блок',
-            },
-            body: 'Поддерживаю!',
-            hashtags: [],
-            likes: 5,
-            comments: 3
-        },
-        {
-            user: {
-                picture: '/mariya.jpg',
-                name: 'Мария Жүсіпбек',
-                address: '1 блок',
-            },
-            body: 'Считаю это лишним.',
-            hashtags: [],
-            likes: 1,
-            comments: 0
+    const { data: post, refresh } = await useFetch(`${runTimeConfig.public.baseApi}/api/post/${route.params.hash}`, {
+        onRequest({ options }) {
+            options.headers = {
+                'Authorization': `Bearer ${useCookie('token').value}`
+            }
         }
-    ])
+    })
+
+    const send = async (text) => {
+        await useFetch(`${runTimeConfig.public.baseApi}/api/post`, {
+            server: false,
+            onRequest({ options }) {
+                options.headers = {
+                    'Authorization': `Bearer ${useCookie('token').value}`
+                }
+                options.method = 'POST'
+                options.body = {
+                    "parent_id": post.value.id,
+                    "category_id": post.value.category_id,
+                    "visibility_id": post.value.visibility_id,
+                    "body": text
+                }
+            }, 
+            onResponse({ response }) {
+                if (response.status == 201) {
+                    text = ''
+                    refresh()
+                }
+            }
+        })
+    }
 </script>

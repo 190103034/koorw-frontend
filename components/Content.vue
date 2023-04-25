@@ -1,5 +1,5 @@
 <template>
-    <main class="content">
+    <main class="content" :class="{content_full: isFull}">
         <div class="container" :class="{container_full: isFull}">
             <slot></slot>
         </div>

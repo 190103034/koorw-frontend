@@ -15,6 +15,9 @@ export default defineNuxtConfig({
                     additionalData: '@import "@/assets/scss/variables.scss";'
                 }
             }
+        },
+        ssr: { 
+            noExternal: ["moment"]
         }
     },
     build: { 

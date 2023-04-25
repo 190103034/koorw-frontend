@@ -12,16 +12,21 @@ html {
 
 .content {
     margin-bottom: 80px;
+    &_full {
+        margin-bottom: 0;
+    }
 }
 
 .container {
     max-width: 425px;
     padding: 0 20px;
     margin: 0 auto;
+    position: relative;
     &__no-padding {
         padding: 0;
     }
     &_full {
+        min-height: 100vh;
         padding: 0 40px;
     }
 }

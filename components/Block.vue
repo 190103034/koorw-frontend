@@ -55,6 +55,9 @@
             margin-top: 3px;
             font-size: $font-size-caption;
         }
+        button {
+            display: block;
+        }
     }
 </style>
 

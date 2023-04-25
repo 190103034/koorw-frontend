@@ -47,7 +47,13 @@
         navigateTo('/login')
     }
 
-    const { data: categories } = await useFetch(`${runTimeConfig.public.baseApi}/api/category`)
+    const { data: categories } = await useFetch(`${runTimeConfig.public.baseApi}/api/category`, {
+        onRequest({ options }) {
+            options.headers = {
+                'Authorization': `Bearer ${useCookie('token').value}`
+            }
+        }
+    })
 
     const { data: posts } = await useFetch(() => `${runTimeConfig.public.baseApi}/api/post${currentCategory.value == '' ? '' : '?category=' + currentCategory.value}`, {
         onRequest({ options }) {

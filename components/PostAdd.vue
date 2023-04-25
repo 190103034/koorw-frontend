@@ -1,20 +1,21 @@
 <template>
     <Block class="post">
         <template #picture>
-            <img class="post__profile-picture" :src="user?.picture" />
+            <img v-if="user.picture" class="post__profile-picture" :src="`http://localhost/images/${user.picture}`" />
+            <div v-if="!user.picture" class="post__profile-picture">{{ initials }}</div>
         </template>
-        <template #title>{{ user?.name }}</template>
-        <template #caption>{{ user?.address }}</template>
+        <template #title>{{ user.name }}</template>
+        <template #caption>{{ user.block.name }}</template>
         <template #body>
-            <textarea class="post__input" name="" id="" placeholder="Напишите чем вы хотите поделиться.."></textarea>
-            <div class="post__select">
+            <slot></slot>
+            <button class="post__select" @click="emit('category')">
                 <font-awesome-icon icon="fa-solid fa-table-cells-large" class="icon_small" />
-                <button>Категория</button>
-            </div>
-            <div class="post__select">
+                <span>{{ categoryTitle }}</span>
+            </button>
+            <button class="post__select" @click="emit('visibility')">
                 <font-awesome-icon icon="fa-solid fa-eye" class="icon_small" />
-                <button>Кто увидит пост</button>
-            </div>
+                <span>{{ visibilityTitle }}</span>
+            </button>
         </template>
     </Block>
 </template>
@@ -41,8 +42,23 @@
 
 <script setup lang="ts">
     const props = defineProps({
-        user: Object as () => User
+        user: {
+            type: Object as () => User,
+            required: true
+        },
+        categoryTitle: {
+            type: String,
+            required: true
+        },
+        visibilityTitle: {
+            type: String,
+            required: true
+        }
     })
 
-    console.log(props.user)
+    const initials = computed(() => {
+        return `${props.user.name.charAt(0)}`
+    })
+
+    const emit = defineEmits(['category', 'visibility'])
 </script>

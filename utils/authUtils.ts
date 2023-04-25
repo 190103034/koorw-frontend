@@ -25,7 +25,9 @@ export default function() {
     
     const logout = () => {
         authStore.setUser(null)
+        userCookie.value = null
         tokenCookie.value = null
+        navigateTo('/')
     }
 
     return {setAuth, isAuth, user, token, logout}

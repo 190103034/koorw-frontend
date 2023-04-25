@@ -3,12 +3,17 @@
         <div class="container">
             <div class="header__flex">
                 <Thumbnail :isLarge="true">
-                    <img class="post__profile-picture" :src="profile.picture" />
+                    <img v-if="profile.picture" class="header__picture" :src="`http://localhost/images/${profile.picture}`" />
+                    <div v-if="!profile.picture" class="header__picture">{{ initials }}</div>
                 </Thumbnail>
                 <div class="header__info">
                     <div class="header__flex header__flex_sb">
-                        <div class="header__title"><strong>{{ profile.name }}</strong> • {{ profile.username }}</div>
-                        <font-awesome-icon icon="fa-solid fa-pencil" />
+                        <div class="header__flex">
+                            <div class="header__title"><strong>{{ profile.name }}</strong> • {{ profile.username }}</div>
+                            <input class="header__input" type="file" name="picture" id="picture" @change="choosePicture($event)">
+                            <label for="picture" class="header__photo"><font-awesome-icon icon="fa-solid fa-camera" /></label>
+                        </div>
+                        <button @click="logout"><font-awesome-icon icon="fa-solid fa-right-from-bracket" /></button>
                     </div>
                     <div class="header__caption">{{ profile.block.house_name }}, {{ profile.block.name.toLowerCase() }}</div>
                 </div>
@@ -38,7 +43,7 @@
     </Content>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .header {
         top: 0;
         width: 100%;
@@ -50,12 +55,20 @@
         .thumbnail {
             margin-right: 15px;
         }
+        &__picture {
+            font-size: 2rem;
+        }
         &__flex {
-            // width: 100%;
             display: flex;
             &_sb {
                 justify-content: space-between;
             }
+        }
+        &__input {
+            display: none;
+        }
+        &__photo {
+            margin-left: 10px;
         }
         &__info {
             flex: 1;
@@ -100,15 +113,31 @@
 </style>
 
 <script setup>
-    const {isAuth, user} = authUtils()
+    const {isAuth, user, logout} = authUtils()
     const runTimeConfig = useRuntimeConfig()
 
     if (!isAuth.value) {
         navigateTo('/login')
     }
 
-    const { data: profile } = await useFetch(`${runTimeConfig.public.baseApi}/api/user/${user.value.id}`)
-    const { data: house } = await useFetch(`${runTimeConfig.public.baseApi}/api/house/${profile.value.block.house_id}`)
+    const { data: profile } = await useFetch(`${runTimeConfig.public.baseApi}/api/user/${user.value.id}`, {
+        onRequest({ options }) {
+            options.headers = {
+                'Authorization': `Bearer ${useCookie('token').value}`
+            }
+        }, 
+    })
+    const { data: house } = await useFetch(`${runTimeConfig.public.baseApi}/api/house/${profile.value.block.house_id}`, {
+        onRequest({ options }) {
+            options.headers = {
+                'Authorization': `Bearer ${useCookie('token').value}`
+            }
+        }, 
+    })
+
+    const initials = computed(() => {
+        return `${profile.value.name.charAt(0)}`
+    })
 
     const masters = ref([])
     const businesses = ref([])
@@ -155,5 +184,29 @@
             telegram: "test"
         }
     ])
+
+    const picture = ref()
+
+    const choosePicture = ($event) => {
+        const target = $event.target;
+        if (target && target.files) {
+            picture.value = target.files[0];
+        }
+        uploadPicture()
+    }
+
+    const uploadPicture = async () => {
+        const formData = new FormData()
+        formData.append('user_id', profile.value.id)
+        formData.append('picture', picture.value)
+        await $fetch(`${runTimeConfig.public.baseApi}/api/user`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${useCookie('token').value}`
+            },
+            body: formData
+        })
+        refresh()
+    }
 
 </script>

@@ -25,7 +25,7 @@
 
 <style lang="scss" scoped>
     .bottom {
-        position: fixed;
+        position: absolute;
         bottom: 70px;
         text-align: center;
         width: calc(100% - 80px);
@@ -46,6 +46,11 @@
     const runTimeConfig = useRuntimeConfig()
     const username = ref("")
     const password = ref("")
+    const {isAuth} = authUtils()
+
+    if (isAuth.value) {
+        navigateTo('/home')
+    }
 
     const getCSRF = async () => {
         await useFetch(`${runTimeConfig.public.baseApi}/sanctum/csrf-cookie`, {
@@ -88,15 +93,14 @@
                     user.value = JSON.stringify(response._data.user)
                     navigateTo('/home')
                 }
+                if (response.status == 401) {
+                    alert('Неверные данные')
+                }
             },
             onResponseError({ response }) {
-                console.log(response._data.message)
                 if (response._data.errors.username) {
                     alert('Пользователя с таким именем пользователя не существует')
                 }
-                // if (response._data.message == 'The provided password is incorrect.') {
-                //     alert('Неверный пароль')
-                // }
             }
         })
     }
