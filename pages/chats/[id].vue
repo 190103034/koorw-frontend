@@ -5,7 +5,7 @@
             <div v-for="message in messages" class="messages__block">
                 <div v-if="message.user.id != user.id" class="messages__picture">
                     <Thumbnail>
-                        <img v-if="message.user.picture" class="post__picture" :src="`http://localhost/images/${message.user.picture}`" />
+                        <img v-if="message.user.picture" class="post__picture" :src="`https://auz3nn7dmfg6zy33bilh.koorw.com/images/${message.user.picture}`" />
                         <div v-if="!message.user.picture" class="post__profile-picture">{{ initials(message.user) }}</div>
                     </Thumbnail>
                 </div>

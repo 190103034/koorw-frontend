@@ -1,7 +1,7 @@
 <template>
     <Block class="post">
         <template #picture>
-            <img v-if="user.picture" class="post__profile-picture" :src="`http://localhost/images/${user.picture}`" />
+            <img v-if="user.picture" class="post__profile-picture" :src="`https://auz3nn7dmfg6zy33bilh.koorw.com/images/${user.picture}`" />
             <div v-if="!user.picture" class="post__profile-picture">{{ initials }}</div>
         </template>
         <template #title>{{ user.name }}</template>

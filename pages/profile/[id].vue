@@ -3,7 +3,7 @@
         <div class="container">
             <div class="header__flex">
                 <Thumbnail :isLarge="true">
-                    <img v-if="profile.picture" class="header__picture" :src="`http://localhost/images/${profile.picture}`" />
+                    <img v-if="profile.picture" class="header__picture" :src="`https://auz3nn7dmfg6zy33bilh.koorw.com/images/${profile.picture}`" />
                     <div v-if="!profile.picture" class="header__picture">{{ initials }}</div>
                 </Thumbnail>
                 <div class="header__info">

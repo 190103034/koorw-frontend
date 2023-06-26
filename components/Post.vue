@@ -2,7 +2,7 @@
     <Block class="post" @click="open">
         <template #picture>
             <NuxtLink @click.stop="" :to="`/profile/${post.user.id}`" >
-                <img v-if="post.user.picture" class="post__picture" :src="`http://localhost/images/${post.user.picture}`" />
+                <img v-if="post.user.picture" class="post__picture" :src="`https://auz3nn7dmfg6zy33bilh.koorw.com/images/${post.user.picture}`" />
                 <div v-if="!post.user.picture" class="post__profile-picture">{{ initials }}</div>
             </NuxtLink>
         </template>
