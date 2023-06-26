@@ -117,10 +117,10 @@
     }
 
     const send = async () => {
-        if (text.value.trim().length === 0 || typeof(categoryId.value) != "number" || typeof(visibilityId.value) != "number") {
-            alert('Заполните все поля')
-            return
-        }
+        // if (text.value.trim().length === 0 || typeof(categoryId.value) != "number" || typeof(visibilityId.value) != "number") {
+        //     alert('Заполните все поля')
+        //     return
+        // }
         await useFetch(`${runTimeConfig.public.baseApi}/api/post`, {
             server: false,
             onRequest({ options }) {

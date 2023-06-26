@@ -1,5 +1,5 @@
 <template>
-    <Header :isBack="true" title="Блок 2"></Header>
+    <Header :isBack="true" title="Чат"></Header>
     <Content>
         <div class="messages">
             <div v-for="message in messages" class="messages__block">
